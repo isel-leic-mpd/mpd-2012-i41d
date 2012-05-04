@@ -2,14 +2,13 @@ package calc;
 
 import java.util.Stack;
 
-public class OpAdd implements IntExpression {
-	final int val;
+public class OpAdd extends IntOperator{
 	public OpAdd(Stack<IntExpression> eval){
-		val = eval.pop().execute() + eval.pop().execute(); 
+		super(eval);
 	}
 	@Override
 	public int execute() {
-		return val;
+		return exp1.execute() + exp2.execute();
 	}
 
 }
