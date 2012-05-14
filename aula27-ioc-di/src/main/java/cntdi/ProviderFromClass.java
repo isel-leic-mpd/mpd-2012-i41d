@@ -2,7 +2,7 @@ package cntdi;
 
 import java.lang.reflect.Constructor;
 
-public class ProviderMultiple<S> implements IProvider<S>{
+public class ProviderFromClass<S> implements IProvider<S>{
 
 	final SimpleInjector inj;
 	final Class<S> impl;
@@ -10,7 +10,7 @@ public class ProviderMultiple<S> implements IProvider<S>{
 	Class [] paramsClasses;
 	Object [] paramsObj;
 	
-	public ProviderMultiple(SimpleInjector inj, Class<S> impl) {
+	public ProviderFromClass(SimpleInjector inj, Class<S> impl) {
 		this.inj = inj;
 		this.impl = impl;
 	}

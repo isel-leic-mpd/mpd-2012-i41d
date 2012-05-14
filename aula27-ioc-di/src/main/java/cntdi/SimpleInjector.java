@@ -22,7 +22,7 @@ public class SimpleInjector implements IInjector{
 					public <S extends T> IScopedBindingBuilder<S> to(Class<S> impl) {
 						IProvider<S> prov = (IProvider<S>) providers.get(impl);
 						if(prov == null){
-							prov = new ProviderMultiple<S>(SimpleInjector.this, impl);
+							prov = new ProviderFromClass<S>(SimpleInjector.this, impl);
 							providers.put(impl, prov);
 						}
 						bindings.put(key, new SimpleBinding<T, S>(key, prov));
@@ -47,8 +47,8 @@ public class SimpleInjector implements IInjector{
 				Class implClass = Class.forName(implName);
 				IProvider prov = providers.get(implClass);
 				if(prov == null){
-					// prov = new ProviderMultiple(this, implClass);
-					prov = new ProviderSingleton(this, implClass);
+					prov = new ProviderFromClass(this, implClass);
+					prov = Scopes.SINGLETON.scope(prov);
 					providers.put(implClass, prov);
 				}
 				bindings.put(key, new SimpleBinding(key, prov));
