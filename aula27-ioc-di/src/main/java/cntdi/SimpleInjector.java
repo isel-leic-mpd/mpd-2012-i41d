@@ -13,6 +13,29 @@ public class SimpleInjector implements IInjector{
 	private Map<Class<?>, IBinding<?,?>> bindings = new HashMap<Class<?>, IBinding<?,?>>();
 	private Map<Class<?>, IProvider<?>> providers = new HashMap<Class<?>, IProvider<?>>();
 	
+	public SimpleInjector(IModule cfgModule){
+		cfgModule.configure(new IBinder() {
+			@Override
+			public <T> IBindingBuilder<T> bind(final Class<T> key) {
+				return new IBindingBuilder<T>() {
+					@Override
+					public <S extends T> IScopedBindingBuilder<S> to(Class<S> impl) {
+						IProvider<S> prov = (IProvider<S>) providers.get(impl);
+						if(prov == null){
+							prov = new ProviderMultiple<S>(SimpleInjector.this, impl);
+							providers.put(impl, prov);
+						}
+						bindings.put(key, new SimpleBinding<T, S>(key, prov));
+						return new IScopedBindingBuilder<S>() {
+							@Override
+							public void in(IScope<S> scope) {
+							}
+						};
+					}
+				};
+			}
+		});
+	}
 	public SimpleInjector(String propsFile){
 		Properties p = new Properties();
 		try{

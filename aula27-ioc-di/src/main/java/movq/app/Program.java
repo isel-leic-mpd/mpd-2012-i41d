@@ -38,7 +38,8 @@ public class Program {
 		query.launch();
 		*/
 		
-		IInjector cnt = new SimpleInjector(cfgFile);
+		// IInjector cnt = new SimpleInjector(cfgFile);
+		IInjector cnt = new SimpleInjector(new MovqCfgModule());
 		IViewQueryMovie query = cnt.getInstance(IViewQueryMovie.class);
 		cnt.getInstance(IViewResults.class);
 		query.launch();
