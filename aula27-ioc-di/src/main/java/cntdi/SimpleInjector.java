@@ -19,16 +19,23 @@ public class SimpleInjector implements IInjector{
 			public <T> IBindingBuilder<T> bind(final Class<T> key) {
 				return new IBindingBuilder<T>() {
 					@Override
-					public <S extends T> IScopedBindingBuilder<S> to(Class<S> impl) {
-						IProvider<S> prov = (IProvider<S>) providers.get(impl);
-						if(prov == null){
-							prov = new ProviderFromClass<S>(SimpleInjector.this, impl);
-							providers.put(impl, prov);
+					public <S extends T> IScopedBindingBuilder<S> to(final Class<S> impl) {
+						IProvider<S> tmpProv = (IProvider<S>) providers.get(impl);
+						if(tmpProv == null){
+							tmpProv = new ProviderFromClass<S>(SimpleInjector.this, impl);
+							providers.put(impl, tmpProv);
 						}
-						bindings.put(key, new SimpleBinding<T, S>(key, prov));
+						final IProvider<S> prov = tmpProv; 
+						final IBinding<T, S> sb = new SimpleBinding<T, S>(key, tmpProv);
+						bindings.put(key, sb);
 						return new IScopedBindingBuilder<S>() {
 							@Override
 							public void in(IScope<S> scope) {
+								IProvider<S> newProv = scope.scope(prov);
+								if(newProv.getClass() != prov.getClass()){
+									providers.put(impl, newProv);
+									sb.setProvider(newProv);
+								}
 							}
 						};
 					}

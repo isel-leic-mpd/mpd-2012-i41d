@@ -5,7 +5,7 @@ import java.lang.reflect.Constructor;
 public class SimpleBinding<T, S extends T> implements IBinding<T, S>{
 
 	final Class<T> key;
-	final IProvider<S> prov;
+	IProvider<S> prov;
 	
 	public SimpleBinding(Class<T> key, IProvider<S> prov) {
 		this.key = key;
@@ -21,5 +21,8 @@ public class SimpleBinding<T, S extends T> implements IBinding<T, S>{
 		return key;
 	}
 
-
+	@Override
+	public void setProvider(IProvider<S> prov) {
+		this.prov = prov;
+	}
 }
