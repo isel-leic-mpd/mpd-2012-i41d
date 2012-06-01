@@ -44,7 +44,7 @@ public class MovqCfgModule extends AbstractModule{
 		ListModelCollection<IMovie> model = new ListModelCollection<IMovie>(new LinkedList<IMovie>());
 		bind(new TypeLiteral<ListModel<IMovie>>(){}).toInstance(model);
 		bind(new TypeLiteral<Collection<IMovie>>(){}).toInstance(model);
-
+		Class<ListModel<IMovie>> c;
 	}
 
 }
